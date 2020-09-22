@@ -1269,7 +1269,7 @@ while True:
 
 			##################################
 			
-			print (msg)
+			print (message.content)
 			for i in range(bossNum):
 				################ 보스 컷처리 ################ 
 				#if message.content.startswith(bossData[i][0] +'컷'):

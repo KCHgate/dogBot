@@ -884,6 +884,8 @@ def getChosung(text):
         if isHangul(ch): #한글이 아닌 글자는 걸러냅니다.
             # python2: result += unichr((ord(ch) - JAMO_START_LETTER)/JAMO_CYCLE + CHOSUNG_START_LETTER)
             result += chr(int((ord(ch) - JAMO_START_LETTER)/JAMO_CYCLE + CHOSUNG_START_LETTER))      
+
+    print (result)
     return result
 
 # 봇이 구동되었을 때 동작되는 코드입니다.

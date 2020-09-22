@@ -869,6 +869,22 @@ def handle_exit():
 			pass
 		except asyncio.CancelledError:
 			pass
+# 한글 초성 찾기
+def getChosung(text):
+    CHOSUNG_START_LETTER = 4352
+    JAMO_START_LETTER = 44032
+    JAMO_END_LETTER = 55203
+    JAMO_CYCLE = 588   
+
+    def isHangul(ch):
+        return ord(ch) >= JAMO_START_LETTER and ord(ch) <= JAMO_END_LETTER
+
+    result = ""
+    for ch in text:
+        if isHangul(ch): #한글이 아닌 글자는 걸러냅니다.
+            # python2: result += unichr((ord(ch) - JAMO_START_LETTER)/JAMO_CYCLE + CHOSUNG_START_LETTER)
+            result += chr(int((ord(ch) - JAMO_START_LETTER)/JAMO_CYCLE + CHOSUNG_START_LETTER))      
+    return result
 
 # 봇이 구동되었을 때 동작되는 코드입니다.
 @client.event
@@ -1253,7 +1269,8 @@ while True:
 
 			for i in range(bossNum):
 				################ 보스 컷처리 ################ 
-				if message.content.startswith(bossData[i][0] +'컷'):
+				#if message.content.startswith(bossData[i][0] +'컷'):
+				if message.content.startswith(bossData[i][0] +'컷') or  message.content.startswith(getChosung(bossData[i][0]) +'ㅋ'):
 					if hello.find('  ') != -1 :
 						bossData[i][6] = hello[hello.find('  ')+2:]
 						hello = hello[:hello.find('  ')]

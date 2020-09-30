@@ -1302,25 +1302,8 @@ while True:
 			##################################
 		
 			for i in range(bossNum):
-				################ 보스 컷처리 ################ 
-				
-				stra =  convert_jonsung_to_chosung(message.content)
-				strb = bossData[i][0] + "컷"
-
-				if len(stra) != len(strb):
-					continue
-
-				rst = [hu.KorChar.ismatch(stra[i], strb[i]) for i in range(len(stra))]
-
-				tmp = 0
-				for k in range(len(rst)):			
-					if rst[k]:
-						tmp = tmp + 1
-
-				
-				#if message.content.startswith(bossData[i][0] +'컷'):
-				#if message.content.startswith(bossData[i][0] +'컷'):
-				if tmp == len(rst):
+				################ 보스 컷처리 ################ 								
+				#if message.content.startswith(bossData[i][0] +'컷'):				
 					if hello.find('  ') != -1 :
 						bossData[i][6] = hello[hello.find('  ')+2:]
 						hello = hello[:hello.find('  ')]

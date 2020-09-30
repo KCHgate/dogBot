@@ -19,6 +19,8 @@ import gspread #정산
 from oauth2client.service_account import ServiceAccountCredentials #정산
 from io import StringIO
 import urllib.request
+import unittest
+import hangulutils as hu
 
 ##################### 로깅 ###########################
 log_stream = StringIO()    
@@ -375,6 +377,36 @@ def init():
 init()
 
 channel = ''
+
+# 종성 --> 초성 변환 ( ex ㅄ --? ㅂㅅ)
+def convert_jonsung_to_chosung(targetstr: str):
+	"중성 문자열을 분리하여 초성으로 반환합니다."
+	rtn = targetstr
+	for c in targetstr:
+		if c == "ㄳ":
+			rtn = targetstr.replace("ㄳ", "ㄱㅅ")
+		elif c == "ㄵ":
+			rtn = targetstr.replace("ㄵ", "ㄴㅈ")
+		elif c == "ㄶ":
+			rtn = targetstr.replace("ㄶ", "ㄴㅎ")
+		elif c == "ㄺ":
+			rtn = targetstr.replace("ㄺ", "ㄹㄱ")
+		elif c == "ㄻ":
+			rtn = targetstr.replace("ㄻ", "ㄹㅁ")
+		elif c == "ㄼ":
+			rtn = targetstr.replace("ㄼ", "ㄹㅂ")
+		elif c == "ㄽ":
+			rtn = targetstr.replace("ㄽ", "ㄹㅅ")
+		elif c == "ㄾ":
+			rtn = targetstr.replace("ㄾ", "ㄹㅌ")
+		elif c == "ㄿ":
+			rtn = targetstr.replace("ㄿ", "ㄹㅍ")
+		elif c == "ㅀ":
+			rtn = targetstr.replace("ㅀ", "ㄹㅎ")
+		elif c == "ㅄ":
+			rtn = targetstr.replace("ㅄ", "ㅂㅅ")
+
+	return rtn
 
 async def task():
 	await client.wait_until_ready()
@@ -1271,8 +1303,24 @@ while True:
 		
 			for i in range(bossNum):
 				################ 보스 컷처리 ################ 
+				
+				stra =  convert_jonsung_to_chosung(message.content)
+				strb = bossData[i][0] + "컷"
+
+				if len(stra) != len(strb):
+					continue
+
+				rst = [hu.KorChar.ismatch(stra[i], strb[i]) for i in range(len(stra))]
+
+				tmp = 0
+				for k in range(len(rst)):			
+					if rst[k]:
+						tmp = tmp + 1
+
+				
 				#if message.content.startswith(bossData[i][0] +'컷'):
-				if message.content.startswith(bossData[i][0] +'컷'):
+				#if message.content.startswith(bossData[i][0] +'컷'):
+				if tmp == len(rst):
 					if hello.find('  ') != -1 :
 						bossData[i][6] = hello[hello.find('  ')+2:]
 						hello = hello[:hello.find('  ')]
@@ -1899,7 +1947,22 @@ while True:
 
 			################ 보스타임 출력 ################ 
 			for command20 in command[20] :
-				if message.content == command20.strip():
+				
+				stra = convert_jonsung_to_chosung(message.content)
+				strb = command20
+
+				if len(stra) != len(strb):
+					continue
+
+				rst = [hu.KorChar.ismatch(stra[i], strb[i]) for i in range(len(strb))]
+
+				tmp = 0
+				for k in range(len(rst)):			
+					if rst[k]:
+						tmp = tmp + 1
+
+				#if message.content == command20.strip():
+				if message.content == command20.strip() or tmp == len(rst):
 					
 					datelist = []
 					datelist2 = []
